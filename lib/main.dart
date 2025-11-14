@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; //fonts
+import 'package:soulence/pages/audio_media_player.dart';
 import 'package:soulence/pages/login.dart';
+import 'package:soulence/pages/podcast_provider.dart';
 import 'package:soulence/pages/podcasts.dart';
 import 'package:soulence/pages/sign_up.dart';
 import 'package:soulence/pages/home.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PodcastProvider()),
+      ],
+      child: const MyApp(),
+    )
+  );
 }
 
 class AppColors {
@@ -28,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/sign_up.dart': (context) => SignUp(),
         '/home.dart': (context) => HomePage(),
         '/podcasts.dart': (context) => Podcasts(),
+        '/audio_media_player.dart': (context) => AudioMediaPlayer(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

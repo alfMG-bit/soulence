@@ -43,7 +43,7 @@ class SignUpPageState extends State<SignUp>{
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: AssetImage("lib/assets/images/logo.png"),
+                  backgroundImage: AssetImage("assets/images/logo.png"),
                 ),
                 Padding( 
                   padding: const EdgeInsets.all(20.0),

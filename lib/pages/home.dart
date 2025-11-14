@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget{
             DrawerHeader(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('lib/assets/images/logo.png'),
+                backgroundImage: AssetImage('assets/images/logo.png'),
               ),
             ),
             ListTile(

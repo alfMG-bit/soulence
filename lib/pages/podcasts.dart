@@ -1,25 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:soulence/main.dart';
-import 'package:material_symbols_icons/symbols.dart'; //google font icons
-
+import 'package:material_symbols_icons/symbols.dart';//google font icons
+import 'package:soulence/pages/podcast_provider.dart'; 
+import 'package:soulence/pages/audio.dart';
 
 class Podcasts extends StatefulWidget{
   const Podcasts({super.key});
-
+  
   @override
-  State<Podcasts> createState() => PodcastsState();
+  State<Podcasts> createState() => PodcastState();
 }
 
-class PodcastsState extends State<Podcasts>{
+class PodcastState extends State<Podcasts>{
 
-  double customFontSize = 20.0;
-  double iconsSize = 20.0;
+
+  final double customFontSize = 12.0;
+  final double iconsSize = 20.0;
+
+  late final dynamic podcastPlaylistProvider;
+
+
+  @override
+  void initState(){
+    super.initState();
+    //get playlist of podcasts provider
+    podcastPlaylistProvider = Provider.of<PodcastProvider>(context, listen: false);
+  }
+
+  //go to podcast
+  void goToPodcast(int podcastIndex){
+    //update current song index
+    podcastPlaylistProvider.currentPodcastIndex = podcastIndex;
+    // navigate to audio player page
+    Navigator.pushNamed(context, '/audio_media_player.dart');
+  }
+
+
+  
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Soulence",
+          "Soulence Podcast",
           style: TextStyle(
             color: Colors.white,
             // fontsize: font_size,
@@ -27,6 +51,9 @@ class PodcastsState extends State<Podcasts>{
         ),
         backgroundColor: AppColors.darkBrown,
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
 
       drawer: Drawer(
@@ -35,14 +62,14 @@ class PodcastsState extends State<Podcasts>{
           children: [
             DrawerHeader(
               child: CircleAvatar(
-                backgroundImage: AssetImage('lib/assets/images/logo.png'),
+                backgroundImage: AssetImage('assets/images/logo.png'),
                 radius: 50,
               ),
             ),
             // ------ candles ------
             ListTile(
               onTap: (){
-                Navigator.pushNamed(context, '/candles.dart');
+                //Navigator.pushNamed(context, '/candles.dart');
               },
               leading: Icon(
                 Symbols.candle,
@@ -75,9 +102,123 @@ class PodcastsState extends State<Podcasts>{
                 ),
               ),
             ),
-            // ------ guides_sessions ------
+            // ------ guided_sessions ------
+            ListTile(
+              onTap: (){
+                //Navigator.pushNamed(context, '/guided_sessions.dart');
+              },
+              leading: Icon(
+                Symbols.communication,
+                color: AppColors.darkBrown,
+                size: iconsSize,
+              ),
+              title: Text(
+                "G U I D E D   S E S S I O N S",
+                style:TextStyle(
+                  fontSize: customFontSize,
+                  color: AppColors.darkBrown,
+                ),
+              ),
+            ),
             // ------ ai_assistant ------
+            ListTile(
+              onTap: (){
+                // Navigator.pushNamed(context, '/ai_assistant.dart');
+              },
+              leading: Icon(
+                Symbols.support_agent,
+                color: AppColors.darkBrown,
+                size: iconsSize,
+              ),
+              title: Text(
+                "A S I S T E N T E   I A",
+                style: TextStyle(
+                  color: AppColors.darkBrown,
+                  fontSize: customFontSize,
+                ),
+              ),
+            ),
+            // ------- my_account -------
+            ListTile(
+              onTap: (){
+                // Navigator.pushNamed(context, 'my_account.dart');
+              },
+              leading: Icon(
+                Symbols.person,
+                color: AppColors.darkBrown, 
+                size: iconsSize,
+                ),
+              title: Text(
+                "M I   C U E N T A",
+                style: TextStyle(
+                  color: AppColors.darkBrown,
+                  fontSize: customFontSize,
+                ),
+              ),
+            ),
+            // ------ exit session -----
+            ListTile(
+              onTap: (){
+                Navigator.pushNamed(context, '/home.dart');
+              },
+              leading: Icon(
+                Symbols.home,
+                color: AppColors.darkBrown, 
+                size: iconsSize,
+                ),
+              title: Text(
+                "S A L I R",
+                style: TextStyle(
+                  color: AppColors.darkBrown,
+                  fontSize: customFontSize,
+                ),
+              ),
+            ),
           ],
+        ),
+      ),
+      
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.darkBrown,
+              AppColors.lightBrown,
+              Colors.white,
+            ]
+          ),
+        ),
+        child:Consumer<PodcastProvider>(
+          builder: (context, value, child)  {
+            final List<Audio> podcastPlaylist = value.podcastPlaylist;
+
+            return ListView.builder(
+              itemCount: podcastPlaylist.length,
+              itemBuilder: (context, index){
+                final Audio audio = podcastPlaylist[index];
+
+                return ListTile(
+                  
+                  title: Text(
+                    audio.audioName,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  subtitle: Text(
+                    audio.duration,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  leading: Image.asset(audio.coverPath),
+                  onTap: () => goToPodcast(index),
+                );
+              },
+            );
+          },
         ),
       ),
     );
