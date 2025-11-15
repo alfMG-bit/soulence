@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soulence/main.dart';
 import 'package:material_symbols_icons/symbols.dart';//google font icons
-import 'package:soulence/pages/podcast_provider.dart'; 
+import 'package:soulence/pages/audio_provider.dart'; 
 import 'package:soulence/pages/audio.dart';
 
 class Podcasts extends StatefulWidget{
@@ -25,13 +25,16 @@ class PodcastState extends State<Podcasts>{
   void initState(){
     super.initState();
     //get playlist of podcasts provider
-    podcastPlaylistProvider = Provider.of<PodcastProvider>(context, listen: false);
+    podcastPlaylistProvider = Provider.of<AudioProvider>(context, listen: false);
   }
 
   //go to podcast
   void goToPodcast(int podcastIndex){
     //update current song index
-    podcastPlaylistProvider.currentPodcastIndex = podcastIndex;
+    podcastPlaylistProvider.playAudio(
+      podcastPlaylistProvider.podcastPlaylist,
+      podcastIndex
+    );
     // navigate to audio player page
     Navigator.pushNamed(context, '/audio_media_player.dart');
   }
@@ -105,7 +108,7 @@ class PodcastState extends State<Podcasts>{
             // ------ guided_sessions ------
             ListTile(
               onTap: (){
-                //Navigator.pushNamed(context, '/guided_sessions.dart');
+                Navigator.pushNamed(context, '/guided_sessions.dart');
               },
               leading: Icon(
                 Symbols.communication,
@@ -190,7 +193,7 @@ class PodcastState extends State<Podcasts>{
             ]
           ),
         ),
-        child:Consumer<PodcastProvider>(
+        child:Consumer<AudioProvider>(
           builder: (context, value, child)  {
             final List<Audio> podcastPlaylist = value.podcastPlaylist;
 
@@ -208,7 +211,7 @@ class PodcastState extends State<Podcasts>{
                     ),
                   ),
                   subtitle: Text(
-                    audio.duration,
+                    audio.author,
                     style: TextStyle(
                       color: Colors.white,
                     ),

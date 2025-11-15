@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soulence/main.dart';
 import 'package:soulence/pages/neu_box.dart';
-import 'package:soulence/pages/podcast_provider.dart';
+import 'package:soulence/pages/audio_provider.dart';
+import 'package:material_symbols_icons/symbols.dart';//google font icons
 
 class AudioMediaPlayer extends StatelessWidget{
   const AudioMediaPlayer({super.key});
@@ -16,25 +17,25 @@ class AudioMediaPlayer extends StatelessWidget{
   }
   @override
   Widget build(BuildContext context){
-    return Consumer<PodcastProvider>(
+    return Consumer<AudioProvider>(
       builder: (context, value, child){
 
-        //get playlist
-        final podcastPlaylist= value.podcastPlaylist;
+       //icon and font size
+       final double customFontSize = 12.0;
+       final double iconsSize = 20.0;
+       // current audio
+       final currentAudio = value.currentAudio;
 
-        // get current song index
-        final currentPodcast = podcastPlaylist[value.currentPodcastIndex ?? 0];
+       if (currentAudio == null) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Error")),
+            body: Center(child: Text("No se está reproduciendo audio.")),
+          );
+        }
 
         //return scaffold
         return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              onPressed: (){
-                value.pause();
-                Navigator.pushNamed(context, '/podcasts.dart');
-              },
-              icon: Icon(Icons.arrow_back)
-            ),
             title: Text(
               "Audio",
               style: TextStyle(
@@ -47,6 +48,133 @@ class AudioMediaPlayer extends StatelessWidget{
               color: Colors.white,
             ),
           ),
+          drawer: Drawer(
+            backgroundColor: Colors.white,
+            child: Column(
+              
+              children: [
+                DrawerHeader(
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/logo.png'),
+                    radius: 50,
+                  ),
+                ),
+                // ------ candles ------
+                ListTile(
+                  onTap: (){
+                    value.pause();
+                    //Navigator.pushNamed(context, '/candles.dart');
+                  },
+                  leading: Icon(
+                    Symbols.candle,
+                    color: AppColors.darkBrown,
+                    size: iconsSize,
+                  ),
+                  title: Text(
+                    "V E L A S",
+                    style: TextStyle(
+                      fontSize: customFontSize,
+                      color: AppColors.darkBrown,
+                    ),
+                  ),
+                ),
+                // ------ podcast ------
+                ListTile(
+                  onTap: () {
+                    value.pause();
+                    Navigator.pushNamed(context, '/podcasts.dart');
+                  },
+                  leading: Icon(
+                    Symbols.headphones,
+                    color: AppColors.darkBrown,
+                    size: iconsSize,
+                  ),
+                  title: Text(
+                    "P O D C A S T",
+                    style: TextStyle(
+                      fontSize: customFontSize,
+                      color: AppColors.darkBrown
+                    ),
+                  ),
+                ),
+                // ------ guided_sessions ------
+                ListTile(
+                  onTap: (){
+                    value.pause();
+                    Navigator.pushNamed(context, '/guided_sessions.dart');
+                  },
+                  leading: Icon(
+                    Symbols.communication,
+                    color: AppColors.darkBrown,
+                    size: iconsSize,
+                  ),
+                  title: Text(
+                    "G U I D E D   S E S S I O N S",
+                    style:TextStyle(
+                      fontSize: customFontSize,
+                      color: AppColors.darkBrown,
+                    ),
+                  ),
+                ),
+                // ------ ai_assistant ------
+                ListTile(
+                  onTap: (){
+                    value.pause();
+                    // Navigator.pushNamed(context, '/ai_assistant.dart');
+                  },
+                  leading: Icon(
+                    Symbols.support_agent,
+                    color: AppColors.darkBrown,
+                    size: iconsSize,
+                  ),
+                  title: Text(
+                    "A S I S T E N T E   I A",
+                    style: TextStyle(
+                      color: AppColors.darkBrown,
+                      fontSize: customFontSize,
+                    ),
+                  ),
+                ),
+                // ------- my_account -------
+                ListTile(
+                  onTap: (){
+                    // Navigator.pushNamed(context, 'my_account.dart');
+                  },
+                  leading: Icon(
+                    Symbols.person,
+                    color: AppColors.darkBrown, 
+                    size: iconsSize,
+                    ),
+                  title: Text(
+                    "M I   C U E N T A",
+                    style: TextStyle(
+                      color: AppColors.darkBrown,
+                      fontSize: customFontSize,
+                    ),
+                  ),
+                ),
+                // ------ exit session -----
+                ListTile(
+                  onTap: (){
+                    Navigator.pushNamed(context, '/home.dart');
+                  },
+                  leading: Icon(
+                    Symbols.home,
+                    color: AppColors.darkBrown, 
+                    size: iconsSize,
+                    ),
+                  title: Text(
+                    "S A L I R",
+                    style: TextStyle(
+                      color: AppColors.darkBrown,
+                      fontSize: customFontSize,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      
           body: Column(
             children: [
               NeuBox(
@@ -55,7 +183,7 @@ class AudioMediaPlayer extends StatelessWidget{
                     //image
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(currentPodcast.coverPath),
+                      child: Image.asset(currentAudio.coverPath),
                     ),
 
                     Padding(
@@ -67,13 +195,13 @@ class AudioMediaPlayer extends StatelessWidget{
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                currentPodcast.audioName,
+                                currentAudio.audioName,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                 ),
                               ),
-                              Text(currentPodcast.duration),
+                              Text(currentAudio.author),
                             ],
                           ),
                         ],

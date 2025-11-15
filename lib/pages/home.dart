@@ -164,31 +164,36 @@ class HomePage extends StatelessWidget{
                 // -----------------------GUIDED SESSIONS SECTION--------------------------
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(20.0),
-                    height: 100.0,
-                    width: widhtContainers,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Symbols.communication,
-                            color: AppColors.darkBrown,
-                            size: iconsSize,
-                          ),
-                          SizedBox(height: sizedBoxesSize,),
-                          Text(
-                            "Sesiones guiadas",
-                            style: TextStyle(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/guided_sessions.dart');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20.0),
+                      height: 100.0,
+                      width: widhtContainers,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Symbols.communication,
                               color: AppColors.darkBrown,
+                              size: iconsSize,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: sizedBoxesSize,),
+                            Text(
+                              "Sesiones guiadas",
+                              style: TextStyle(
+                                color: AppColors.darkBrown,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

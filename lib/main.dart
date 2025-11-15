@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; //fonts
 import 'package:soulence/pages/audio_media_player.dart';
+import 'package:soulence/pages/guided_sessions.dart';
 import 'package:soulence/pages/login.dart';
-import 'package:soulence/pages/podcast_provider.dart';
+import 'package:soulence/pages/audio_provider.dart';
 import 'package:soulence/pages/podcasts.dart';
 import 'package:soulence/pages/sign_up.dart';
 import 'package:soulence/pages/home.dart';
@@ -12,7 +13,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => PodcastProvider()),
+        ChangeNotifierProvider(create: (context) => AudioProvider()),
       ],
       child: const MyApp(),
     )
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/sign_up.dart': (context) => SignUp(),
         '/home.dart': (context) => HomePage(),
         '/podcasts.dart': (context) => Podcasts(),
+        '/guided_sessions.dart': (context) => GuidedSessions(),
         '/audio_media_player.dart': (context) => AudioMediaPlayer(),
       },
       debugShowCheckedModeBanner: false,
