@@ -15,7 +15,7 @@ class AudioProvider extends ChangeNotifier{
       audioName: "Bienvenid@ a Soulence Podcast",
       author: "Soulence",
       coverPath: coverPathPodcast, 
-      audioPath: "podcast/podcast_test.mp3",
+      audioPath: "assets/podcast/podcast_test.mp3",
       audioType: true,
     ),
     //podcast 1
@@ -29,7 +29,7 @@ class AudioProvider extends ChangeNotifier{
       audioName: "Nuestras velas",
       author: "Soulence", 
       coverPath: coverPathGuidedSessions,
-      audioPath: "guided_sessions/vela_soulence.mp3",
+      audioPath: "assets/guided_sessions/vela_soulence.mp3",
       audioType: true,
     ),
     //stress guided session
@@ -37,7 +37,7 @@ class AudioProvider extends ChangeNotifier{
       audioName: "Sesión guiada para estrés",
       author: "Soulence", 
       coverPath: coverPathGuidedSessions,
-      audioPath: "guided_sessions/estres.mp3",
+      audioPath: "assets/guided_sessions/estres.mp3",
       audioType: false,
     ),
     //anxiety guided session
@@ -45,7 +45,7 @@ class AudioProvider extends ChangeNotifier{
       audioName: "Sesión guiada para ansiedad",
       author: "Soulence", 
       coverPath: coverPathGuidedSessions,
-      audioPath: "guided_sessions/ansiedad.mp3",
+      audioPath: "assets/guided_sessions/ansiedad.mp3",
       audioType: false,
     ),
   ];

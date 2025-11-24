@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570635666250",
+    "project_id": "soulence-project",
+    "storage_bucket": "soulence-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570635666250:android:5d9b550acacd42d51ab7b3",
+        "android_client_info": {
+          "package_name": "com.example.soulence"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-vIK4ut-hznUDJKU6_XiIL9UfzMdhooo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

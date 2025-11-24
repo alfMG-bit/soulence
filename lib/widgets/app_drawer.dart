@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:soulence/main.dart';
 import 'package:soulence/services/membership_service.dart';
-import 'package:material_symbols_icons/symbols.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+const double customFontSize = 12.0;
+const double iconsSize = 20;
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
 
-class _HomePageState extends State<HomePage> {
-  final _membershipService = MembershipService();
-
-  double iconsSize = 32.0;
-
-  // Ventana emergente de estado de membresía
   void _showMembershipStatus(BuildContext context) {
     showDialog(
       context: context,
@@ -35,48 +28,31 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _membershipService.isPremium
-                      ? Colors.green.withOpacity(0.1)
-                      : AppColors.lightBrown.withOpacity(0.3),
+                  color: AppColors.lightBrown.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: _membershipService.isPremium
-                        ? Colors.green
-                        : AppColors.darkBrown,
-                  ),
+                  border: Border.all(color: AppColors.darkBrown),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      _membershipService.isPremium
-                          ? Symbols.workspace_premium
-                          : Symbols.person,
-                      color: _membershipService.isPremium
-                          ? Colors.green
-                          : AppColors.darkBrown,
-                    ),
+                    Icon(Symbols.person, color: AppColors.darkBrown),
                     SizedBox(width: 8),
                     Text(
-                      _membershipService.planName,
+                      "Plan Gratuito",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: _membershipService.isPremium
-                            ? Colors.green
-                            : AppColors.darkBrown,
+                        color: AppColors.darkBrown,
                       ),
                     ),
                   ],
                 ),
               ),
-              if (!_membershipService.isPremium) ...[
-                SizedBox(height: 16),
-                Text(
-                  "Valor de membresía: \$10",
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
+              SizedBox(height: 16),
+              Text(
+                "Valor de membresía: \$10",
+                style: TextStyle(fontSize: 16),
+              ),
             ],
           ),
           actions: [
@@ -85,31 +61,29 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
               child: Text(
-                _membershipService.isPremium ? "Cerrar" : "Cancelar",
+                "Cancelar",
                 style: TextStyle(color: Colors.grey),
               ),
             ),
-            if (!_membershipService.isPremium)
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _showDiscountCodeDialog(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.darkBrown,
-                ),
-                child: Text(
-                  "Comprar Membresía",
-                  style: TextStyle(color: Colors.white),
-                ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _showDiscountCodeDialog(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.darkBrown,
               ),
+              child: Text(
+                "Comprar Membresía",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         );
       },
     );
   }
 
-  // Diálogo para ingresar código de descuento
   void _showDiscountCodeDialog(BuildContext context) {
     final codeController = TextEditingController();
 
@@ -206,7 +180,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // Diálogo de pago con tarjeta
   void _showPaymentDialog(BuildContext context, {required bool hasDiscount}) {
     final cardNumberController = TextEditingController();
     final cardHolderController = TextEditingController();
@@ -392,6 +365,8 @@ class _HomePageState extends State<HomePage> {
 
   // Diálogo de éxito
   void _showSuccessDialog(BuildContext context) {
+    final _membershipService = MembershipService();
+    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -441,9 +416,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _membershipService.activatePremium();
-                });
+                _membershipService.activatePremium();
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
@@ -461,277 +434,125 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Verificar acceso premium
-  void _checkPremiumAccess(BuildContext context, String routeName) {
-    if (_membershipService.isPremium) {
-      Navigator.pushNamed(context, routeName);
-    } else {
-      _showPremiumRequiredDialog(context);
-    }
-  }
-
-  // Diálogo de acceso premium requerido
-  void _showPremiumRequiredDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            children: [
-              Icon(Icons.lock, color: Colors.orange),
-              SizedBox(width: 8),
-              Text("Oops!"),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Symbols.workspace_premium,
-                size: 64,
-                color: Colors.orange,
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Contrata la membresía para poder acceder a esta parte",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                "Cancelar",
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _showDiscountCodeDialog(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.darkBrown,
-              ),
-              child: Text(
-                "Pagar Membresía",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Soulence",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.darkPink,
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-      ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: Column(
-          children: [
-            DrawerHeader(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/logo.png'),
-              ),
+    return Drawer(
+      backgroundColor: Colors.white,
+      child: Column(
+        children: [
+          DrawerHeader(
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/logo.png'),
+              radius: 50,
             ),
-            ListTile(
-              onTap: () {
-                Navigator.pop(context);
-                _showMembershipStatus(context);
-              },
-              leading: Icon(
-                Symbols.card_membership,
+          ),
+          // ------ candles ------
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/candles.dart');
+            },
+            leading: Icon(
+              Symbols.candle,
+              color: AppColors.darkBrown,
+              size: iconsSize,
+            ),
+            title: Text(
+              "V E L A S",
+              style: TextStyle(
+                fontSize: customFontSize,
                 color: AppColors.darkBrown,
-                size: iconsSize,
-              ),
-              title: Text(
-                "Estado",
-                style: TextStyle(
-                  color: AppColors.darkBrown,
-                  fontSize: 18,
-                ),
               ),
             ),
-            SizedBox(height: 10),
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, '/login.dart');
-              },
-              leading: Icon(
-                Symbols.exit_to_app,
+          ),
+          // ------ podcast ------
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/podcasts.dart');
+            },
+            leading: Icon(
+              Symbols.headphones,
+              color: AppColors.darkBrown,
+              size: iconsSize,
+            ),
+            title: Text(
+              "P O D C A S T",
+              style: TextStyle(
+                  fontSize: customFontSize, color: AppColors.darkBrown),
+            ),
+          ),
+          // ------ guided_sessions ------
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/guided_sessions.dart');
+            },
+            leading: Icon(
+              Symbols.communication,
+              color: AppColors.darkBrown,
+              size: iconsSize,
+            ),
+            title: Text(
+              "G U I D E D   S E S S I O N S",
+              style: TextStyle(
+                fontSize: customFontSize,
                 color: AppColors.darkBrown,
-                size: iconsSize,
               ),
-              title: Text(
-                "Cerrar sesión",
-                style: TextStyle(
-                  color: AppColors.darkBrown,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.darkPink,
-              AppColors.lightPink,
-              Colors.white,
-            ],
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                HomeMenuItem(
-                  icon: Symbols.candle,
-                  title: "Vela",
-                  routeName: '/candles.dart',
-                  requiresPremium: false,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/candles.dart');
-                  },
-                ),
-                HomeMenuItem(
-                  icon: Symbols.headphones,
-                  title: "Podcast",
-                  routeName: '/podcasts.dart',
-                  requiresPremium: false,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/podcasts.dart');
-                  },
-                ),
-                HomeMenuItem(
-                  icon: Symbols.communication,
-                  title: "Sesiones guiadas",
-                  routeName: '/guided_sessions.dart',
-                  requiresPremium: false,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/guided_sessions.dart');
-                  },
-                ),
-                HomeMenuItem(
-                  icon: Symbols.support_agent,
-                  title: "Asistente virtual",
-                  routeName: '/ai_assistant.dart',
-                  requiresPremium: true,
-                  onTap: () {
-                    _checkPremiumAccess(context, '/ai_assistant.dart');
-                  },
-                ),
-                HomeMenuItem(
-                  icon: Symbols.group,
-                  title: "Contactos",
-                  routeName: '/contacts.dart',
-                  requiresPremium: true,
-                  onTap: () {
-                    _checkPremiumAccess(context, '/contacts.dart');
-                  },
-                ),
-              ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class HomeMenuItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String routeName;
-  final bool requiresPremium;
-  final VoidCallback onTap;
-
-  static const double _containerHeight = 100.0;
-  static const double _containerWidth = 160.0;
-  static const double _iconSize = 32.0;
-  static const double _boxHeight = 5.0;
-
-  const HomeMenuItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.routeName,
-    required this.requiresPremium,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              height: _containerHeight,
-              width: _containerWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      icon,
-                      color: AppColors.darkBrown,
-                      size: _iconSize,
-                    ),
-                    SizedBox(height: _boxHeight),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: AppColors.darkBrown,
-                      ),
-                    ),
-                  ],
-                ),
+          // ------ ai_assistant ------
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/ai_assistant.dart');
+            },
+            leading: Icon(
+              Symbols.support_agent,
+              color: AppColors.darkBrown,
+              size: iconsSize,
+            ),
+            title: Text(
+              "A S I S T E N T E   I A",
+              style: TextStyle(
+                color: AppColors.darkBrown,
+                fontSize: customFontSize,
               ),
             ),
-            if (requiresPremium)
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Icon(
-                  Symbols.workspace_premium,
-                  color: Colors.orange,
-                  size: 24,
-                ),
+          ),
+          // ------- my_account (ESTADO) -------
+          ListTile(
+            onTap: () {
+              _showMembershipStatus(context);
+            },
+            leading: Icon(
+              Symbols.card_membership,
+              color: AppColors.darkBrown,
+              size: iconsSize,
+            ),
+            title: Text(
+              "E S T A D O",
+              style: TextStyle(
+                color: AppColors.darkBrown,
+                fontSize: customFontSize,
               ),
-          ],
-        ),
+            ),
+          ),
+          // ------ exit session -----
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/home.dart');
+            },
+            leading: Icon(
+              Symbols.home,
+              color: AppColors.darkBrown,
+              size: iconsSize,
+            ),
+            title: Text(
+              "S A L I R",
+              style: TextStyle(
+                color: AppColors.darkBrown,
+                fontSize: customFontSize,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

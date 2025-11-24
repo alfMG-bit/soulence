@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; //fonts
+import 'package:google_fonts/google_fonts.dart';
 import 'package:soulence/pages/audio_media_player.dart';
 import 'package:soulence/pages/guided_sessions.dart';
 import 'package:soulence/pages/login.dart';
@@ -7,13 +7,32 @@ import 'package:soulence/pages/audio_provider.dart';
 import 'package:soulence/pages/podcasts.dart';
 import 'package:soulence/pages/sign_up.dart';
 import 'package:soulence/pages/home.dart';
+import 'package:soulence/pages/chatbot/chat_provider.dart';
+import 'package:soulence/pages/ai_assistant.dart';
 import 'package:provider/provider.dart';
+import 'package:soulence/pages/candles.dart';
+import 'package:soulence/pages/contacts.dart';
+import 'package:soulence/pages/return_policy.dart';
 
-void main() {
+// YA NO NECESITAS FIREBASE
+// Elimina o comenta estas líneas:
+// import 'package:soulence/firebase_options.dart';
+// import 'package:firebase_core/firebase_core.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // YA NO NECESITAS INICIALIZAR FIREBASE
+  // Comenta o elimina:
+  // await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform, 
+  // );
+  
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AudioProvider()),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),      
       ],
       child: const MyApp(),
     )
@@ -34,13 +53,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes:{
+      routes: {
         '/login.dart': (context) => Login(),
         '/sign_up.dart': (context) => SignUp(),
         '/home.dart': (context) => HomePage(),
         '/podcasts.dart': (context) => Podcasts(),
         '/guided_sessions.dart': (context) => GuidedSessions(),
         '/audio_media_player.dart': (context) => AudioMediaPlayer(),
+        '/ai_assistant.dart': (context) => AiAssistant(),
+        '/candles.dart': (context) => Candles(),
+        '/contacts.dart': (context) => Contacts(),
+        '/return_policy.dart': (context) => ReturnPolicy(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -49,7 +72,6 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: Login(),
-
     );
   }
 }
