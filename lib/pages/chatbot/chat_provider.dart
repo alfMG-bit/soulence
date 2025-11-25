@@ -4,7 +4,7 @@ import 'package:soulence/pages/chatbot/message.dart';
 
 class ChatProvider with ChangeNotifier{
   //DeepSeek API Service
-  final _apiService = DeepSeekApiService(apiKey: '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');
+  final _apiService = DeepSeekApiService(apiKey: 'HERE GOES YOUR API KEY');
 
   // Mesages & Loading
   final List<Message> _messages = [];
